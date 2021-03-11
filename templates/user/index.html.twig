@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        Bonjour {{ app.user.fisrtName }}. <a href="{{ path('app_logout') }}">Me déconnecter</a>
+    {% else %}
+        <a href="{{ path('app_login') }}">Me connecter</a>
+    {% endif %}
+{% endblock %}
