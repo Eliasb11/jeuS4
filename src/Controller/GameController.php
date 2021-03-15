@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Game;
 use App\Entity\Round;
 use App\Repository\CardRepository;
+use App\Repository\GameRepository;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -119,10 +121,13 @@ class GameController extends AbstractController
 
     /**
      * @Route("/show-game/{game}", name="show_game")
+     * @param CardRepository $cardRepository
+     * @param Game $game
+     * @return Response
      */
     public function showGame(
         CardRepository $cardRepository,
-        Game $game
+        $game
     ): Response {
         $cards = $cardRepository->findAll();
         $tCards = [];
@@ -130,10 +135,11 @@ class GameController extends AbstractController
             $tCards[$card->getId()] = $card;
         }
 
-        return $this->render('game/show_game.html.twig', [
+        return $this->render('game/show_game.html.twig',
+        array(
             'game' => $game,
             'set' => $game->getRounds()[0],
-            'cards' => $tCards
-        ]);
+            'cards' => $tCards)
+        );
     }
 }

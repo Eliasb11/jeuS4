@@ -15,16 +15,16 @@
 </head>
 <body>
 <header>
-    <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="navbar navbar-dark bg-primary">
         <div class="container">
-            <a href="#" class="navbar-brand d-flex align-items-center">
-                <strong>Jeu S4</strong>
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <strong>Projet S4</strong>
             </a>
             <span class="text-white">
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    Bonjour {{ app.user.fisrtName }}. <a href="{{ path('app_logout') }}">Me déconnecter</a>
+                    Bonjour {{ app.user.fisrtName }} <a class="btn btn-outline-light my-2 my-sm-0" href="../index.php/login">Déconnexion</a>
                 {% else %}
-                    <a style="color: white; text-decoration: none;" href="{{ path('app_login') }}">Me connecter</a>
+                    <a class="btn btn-outline-light my-2 my-sm-0" style=" text-decoration: none;" href="../index.php/login">Connexion</a>
                 {% endif %}
                     </span>
         </div>

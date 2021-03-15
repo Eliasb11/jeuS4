@@ -88,6 +88,7 @@ class Game
         return $this->created;
     }
 
+
     public function setCreated(\DateTimeInterface $created): self
     {
         $this->created = $created;
@@ -119,6 +120,9 @@ class Game
         return $this;
     }
 
+
+
+
     /**
      * @return Collection|Round[]
      */
@@ -148,4 +152,6 @@ class Game
 
         return $this;
     }
+
+
 }

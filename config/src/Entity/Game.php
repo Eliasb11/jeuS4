@@ -45,13 +45,13 @@ class Game
     private $winner;
 
     /**
-     * @ORM\OneToMany(targetEntity=Set::class, mappedBy="game")
+     * @ORM\OneToMany(targetEntity=Round::class, mappedBy="game")
      */
-    private $sets;
+    private $rounds;
 
     public function __construct()
     {
-        $this->sets = new ArrayCollection();
+        $this->rounds = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,6 +88,7 @@ class Game
         return $this->created;
     }
 
+
     public function setCreated(\DateTimeInterface $created): self
     {
         $this->created = $created;
@@ -119,33 +120,38 @@ class Game
         return $this;
     }
 
+
+
+
     /**
-     * @return Collection|Set[]
+     * @return Collection|Round[]
      */
-    public function getSets(): Collection
+    public function getRounds(): Collection
     {
-        return $this->sets;
+        return $this->rounds;
     }
 
-    public function addSet(Set $set): self
+    public function addRound(Round $round): self
     {
-        if (!$this->sets->contains($set)) {
-            $this->sets[] = $set;
-            $set->setGame($this);
+        if (!$this->rounds->contains($round)) {
+            $this->rounds[] = $round;
+            $round->setGame($this);
         }
 
         return $this;
     }
 
-    public function removeSet(Set $set): self
+    public function removeRound(Round $round): self
     {
-        if ($this->sets->removeElement($set)) {
+        if ($this->rounds->removeElement($round)) {
             // set the owning side to null (unless already changed)
-            if ($set->getGame() === $this) {
-                $set->setGame(null);
+            if ($round->getGame() === $this) {
+                $round->setGame(null);
             }
         }
 
         return $this;
     }
+
+
 }
