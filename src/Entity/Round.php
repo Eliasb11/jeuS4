@@ -123,6 +123,7 @@ class Round
         return $this;
     }
 
+
     public function getUser1BoardCards(): ?array
     {
         return $this->user1_board_cards;

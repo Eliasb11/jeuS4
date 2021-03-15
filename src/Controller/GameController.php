@@ -121,25 +121,25 @@ class GameController extends AbstractController
 
     /**
      * @Route("/show-game/{game}", name="show_game")
-     * @param CardRepository $cardRepository
-     * @param Game $game
-     * @return Response
      */
     public function showGame(
         CardRepository $cardRepository,
-        $game
-    ): Response {
+        Game $game
+    ):
+    Response {
         $cards = $cardRepository->findAll();
         $tCards = [];
         foreach ($cards as $card) {
             $tCards[$card->getId()] = $card;
         }
 
-        return $this->render('game/show_game.html.twig',
-        array(
-            'game' => $game,
-            'set' => $game->getRounds()[0],
-            'cards' => $tCards)
+        return $this->render('game/show_game.html.twig', array(
+                'game' => $game,
+                'set' => $game->getRounds()[0],
+                'cards' => $tCards)
         );
+
     }
+
+
 }
