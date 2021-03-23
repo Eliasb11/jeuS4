@@ -17,8 +17,10 @@ class UserController extends AbstractController
      */
     public function index(): Response
     {
+        $user = $this->getUser();
+        $stats = $user->getStats();
         return $this->render('user/index.html.twig', [
-            'user' => $this->getUser(),
+            'user' => $user, 'stats'=> $stats,
         ]);
     }
 }

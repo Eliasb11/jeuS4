@@ -80,6 +80,11 @@ class User implements UserInterface
      */
     private $isVerified = false;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Stats::class,  cascade={"persist", "remove"})
+     * * @ORM\JoinColumn(nullable=true)
+     */
+    private $stats;
 
 
     public function __construct()
@@ -325,4 +330,16 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getStats(): ?Stats
+    {
+        return $this->stats;
+    }
+
+    public function setStats($stats): void
+    {
+        $this->stats = $stats;
+    }
+
+
 }

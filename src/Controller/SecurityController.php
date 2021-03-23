@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Stats;
 use App\Entity\User;
 use App\Form\RegistrationType;
 
@@ -58,13 +59,26 @@ class SecurityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()){
 
+
+            $stats= new Stats();
+            $stats->setUser($user);
+            $stats->setDefaite(0);
+            $stats->setVictoire(0);
+            $stats->setParties(0);
+
+            $manager->persist($stats);
+            $manager->flush();
+
             $hash = $encoder->encodePassword($user, $user->getPassword());
 
             $user->setPassword($hash);
-
+            $user->getStats($stats);
 
             $manager->persist($user);
             $manager->flush();
+
+
+
 
             return $this->redirectToRoute('user_profil');
         }
