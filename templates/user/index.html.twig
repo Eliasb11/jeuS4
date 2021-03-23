@@ -4,6 +4,36 @@
 
 {% block body %}
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <h2 style="text-align: center">Bienvenue à toi {{ app.user.fisrtName }} </h2>
+        <h2 style="text-align: center">Bienvenue à toi {{ app.user.pseudo }} </h2>
     {% endif %}
+    <br><br><br>
+    <div class="row">
+
+        <div class="col-4" style="border-radius: 10px; background-color: #999999">
+            <h4 style="text-align: center">Vos Informations:</h4><br>
+            <h5>Nom: {{ app.user.lastName }}</h5>
+            <h5>Prénom: {{ app.user.firstName }}</h5>
+            <h5>Email: {{ app.user.email }}</h5>
+            <h5>Pseudo: {{ app.user.pseudo }}</h5>
+        </div>
+
+
+    <div class="col-4">
+
+    </div>
+
+    <div class="col-4"  style="border-radius: 10px; background-color: #999999">
+        <h4 style="text-align: center">Vos Statistiques:</h4><br>
+        <h5>Nombre Victoire: </h5>
+        <h5>Nombre Défaites: </h5>
+        <h5>Parties Jouées: </h5>
+    </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-12" style="text-align: center; margin-top: 200px">
+            <button><a href="{{ path('new_game') }}">JOUER</a></button>
+        </div>
+    </div>
 {% endblock %}

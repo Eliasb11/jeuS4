@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
-    {# Run `composer require symfony/webpack-encore-bundle`
-       and uncomment the following Encore helpers to start using Symfony UX #}
+
     {% block stylesheets %}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     {% endblock %}
 
     {% block javascripts %}
-        {#{{ encore_entry_script_tags('app') }}#}
+
     {% endblock %}
 </head>
 <body>
@@ -20,11 +19,16 @@
             <a href="/" class="navbar-brand d-flex align-items-center">
                 <strong>Projet S4</strong>
             </a>
+            <a href="{{ path('new_game') }}" class="navbar-brand d-flex" >
+                <strong style="text-align: center">Jouer</strong>
+            </a>
             <span class="text-white">
+
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    Bonjour {{ app.user.fisrtName }} <a class="btn btn-outline-light my-2 my-sm-0" href="../index.php/login">Déconnexion</a>
+                    Bonjour,  <a style="color: #FFFFFF" href="{{ path('user_profil') }}">{{ app.user.pseudo }}</a> <a class="btn btn-outline-light my-2 my-sm-0" href="{{ path('app_logout') }}"> Déconnexion</a>
                 {% else %}
-                    <a class="btn btn-outline-light my-2 my-sm-0" style=" text-decoration: none;" href="../index.php/login">Connexion</a>
+                    <a class="btn btn-outline-light my-2 my-sm-0" style=" text-decoration: none;" href="{{ path('app_register') }}">Inscription</a>
+                    <a class="btn btn-outline-light my-2 my-sm-0" style=" text-decoration: none;" href="{{ path('app_login') }}">Connexion</a>
                 {% endif %}
                     </span>
         </div>

@@ -52,6 +52,14 @@ class User implements UserInterface
      */
     private $birthday;
 
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $pseudo;
+
+
+
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="user1")
      */
@@ -66,6 +74,13 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="winner")
      */
     private $winners;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
+
+
 
     public function __construct()
     {
@@ -106,7 +121,7 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles[] = $this->roles;
+        $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_JOUEUR';
 
@@ -155,12 +170,25 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getFisrtName(): ?string
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): self
+    {
+        $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+
+    public function getFirstName(): ?string
     {
         return $this->firstname;
     }
 
-    public function setFirstNale(string $firstname): self
+    public function setFirstName(string $firstname): self
     {
         $this->firstname = $firstname;
 
@@ -284,5 +312,17 @@ class User implements UserInterface
     public function display()
     {
         return $this->firstname.' '.$this->lastname;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
     }
 }

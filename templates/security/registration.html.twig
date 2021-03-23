@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <br>
+<div class="row" style="background-color: lightgrey; width: 500px; text-align: center; margin: auto; border-radius: 10px">
+    <div class="col-2">
+
+    </div>
+
+
+{{ form_start(form , {'attr': {class:'col-8'}})  }}
+
+    <h1 class="h3 mb-3 font-weight-normal">Inscrivez-vous !! </h1>
+
+
+    <label for="">Prénom</label> <br>
+    {{ form_widget(form.firstname, {'attr': {class:'form-control'}}) }}
+
+    <br>
+
+    <label for="">Nom</label> <br>
+    {{ form_widget(form.lastname, {'attr': {class:'form-control'}}) }}
+    <br>
+
+    <label for="">Pseudo</label> <br>
+    {{ form_widget(form.pseudo, {'attr': {class:'form-control'}}) }}
+    <br>
+
+    <label for="">Adresse Mail</label><br>
+    {{ form_widget(form.email, {'attr': {class:'form-control'}}) }}
+
+    <br>
+    <label for="">Mot de Passe</label><br>
+    {{ form_widget(form.password, {'attr': {class:'form-control'}}) }}
+
+    <br>
+    <label for="">Date de Naissance</label><br>
+    {{ form_widget(form.birthday, {'attr': {class:'form-control'}}) }}
+
+    <br>
+
+
+    <button type="submit" class="btn btn-outline-light my-2 my-sm-0 bg-primary">S'Inscrire</button>
+
+
+
+    {{ form_end(form) }}
+    </div>
+{% endblock body %}
+
