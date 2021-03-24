@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %} Inscription {% endblock %}
+
 {% block body %}
 
     <br>
@@ -34,9 +36,14 @@
     <label for="">Mot de Passe</label><br>
     {{ form_widget(form.password, {'attr': {class:'form-control'}}) }}
 
+
     <br>
     <label for="">Date de Naissance</label><br>
     {{ form_widget(form.birthday, {'attr': {class:'form-control'}}) }}
+
+    <br>
+    <label for="">Captcha</label><br>
+    {{ form_widget(form.captcha, {'attr': {class:'form-control'}}) }}
 
     <br>
 

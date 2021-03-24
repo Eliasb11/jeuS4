@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Gregwar\CaptchaBundle\Type\CaptchaType;
 
 class RegistrationType extends AbstractType
 {
@@ -28,6 +29,7 @@ class RegistrationType extends AbstractType
 
             ->add('birthday' , BirthdayType::class)
 
+            ->add('captcha', CaptchaType::class)
 
 
 

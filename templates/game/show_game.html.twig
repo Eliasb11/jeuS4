@@ -1,77 +1,52 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <br>
-    <div class="row">
 
-        <div class="row">
-            <h3>Plateau Adversaire</h3>
-        </div>
-
-        <div class="col-8">
-            {% for card in set.user2HandCards %}
-                <img style="width: 100px" src="{{ asset('cartes_main/'~cards[card].picture) }}">
-
-                {{ cards[card].number }}
-            {% endfor %}
-        </div>
-        <div class="col-4">
-            Actions
-        </div>
+    <div id="plateau">
+        {{ include('game/plateau_game.html.twig') }}
     </div>
-
-
-    <br>
-
-
-    <div class="row">
-
-
-
-
-
-
-
-        <div class="col-8">
-
-            <h3 style="text-align: center">Plateau</h3>
-
-            <img style="width: 100px" src="{{ asset('cartes_plateau/saigo.png') }}">
-            <img style="width: 100px" src="{{ asset('cartes_plateau/miyaneko.png') }}">
-            <img style="width: 100px" src="{{ asset('cartes_plateau/nekonaga.png') }}">
-            <img style="width: 100px" src="{{ asset('cartes_plateau/toneko.png') }}">
-            <img style="width: 100px" src="{{ asset('cartes_plateau/nekoshan.png') }}">
-            <img style="width: 100px" src="{{ asset('cartes_plateau/nakano.png') }}">
-            <img style="width: 100px" src="{{ asset('cartes_plateau/minamoto.png') }}">
-
-        </div>
-
-    </div>
-
-    <br>
-
-    <div class="row">
-       <h3> Mon Plateau</h3>
-    </div>
-
-    <div class="row">
-        <div class="col-8">
-            {% for card in set.user1HandCards %}
-                <img style="width: 100px" src="{{ asset('cartes_main/'~cards[card].picture) }}">
-
-                {{ cards[card].number }}
-            {% endfor %}
-        </div>
-        <div class="col-4">
-            Mes Actions
-        </div>
-    </div>
-
-
 
 {% endblock %}
 
-{% block title %}
+{% block title %} Partie de jeu{% endblock %}
 
+{% block javascripts %}
+    <script>
+        let action
+        $(document).on('click', '#secret', function(){
+            console.log('secret')
+            action = 'secret' //mémorise l'action en cours
+            $('.choixSecret').show()
+            $('#valider').show()
+        })
+        $(document).on('click', '#valider', function(){
+            switch (action) {
+                case 'secret':
+                    donneesAction = {
+                        action: 'secret',
+                        carte: $('input[name="carte_secret"]:checked').val()
+                    }
+                    break;
+                case 'depot':
+                    break;
+                case 'offre':
+                    break;
+                case 'echange':
+                    break;
+            }
+            $.ajax({
+                url: "{{ path('action_game', {game: game.id}) }}",
+                data: donneesAction,
+                method: 'POST',
+                success: function(data) {
+                    if (data == true) {
+                        $('#plateau').load("{{ path('refresh_plateau_game', {game:game.id}) }}")
+                    }
+                },
+                error: function(){
+                }
+            })
+        })
+    </script>
 {% endblock %}
 
