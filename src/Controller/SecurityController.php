@@ -64,6 +64,8 @@ class SecurityController extends AbstractController
             $stats->setDefaite(0);
             $stats->setVictoire(0);
             $stats->setParties(0);
+            $stats->setPartiesEnCours(0);
+            $stats->setPartiesTerminees(0);
 
             $manager->persist($stats);
             $manager->flush();

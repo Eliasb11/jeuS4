@@ -33,6 +33,16 @@ class Stats
      */
     private $parties;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $parties_en_cours;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $parties_terminees;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +81,30 @@ class Stats
     public function setParties(int $parties): self
     {
         $this->parties = $parties;
+
+        return $this;
+    }
+
+    public function getPartiesEnCours(): ?int
+    {
+        return $this->parties_en_cours;
+    }
+
+    public function setPartiesEnCours(int $parties_en_cours): self
+    {
+        $this->parties_en_cours = $parties_en_cours;
+
+        return $this;
+    }
+
+    public function getPartiesTerminees(): ?int
+    {
+        return $this->parties_terminees;
+    }
+
+    public function setPartiesTerminees(int $parties_terminees): self
+    {
+        $this->parties_terminees = $parties_terminees;
 
         return $this;
     }
