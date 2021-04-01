@@ -49,6 +49,12 @@ class Game
      */
     private $rounds;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quiJoue = 1;
+
+
     public function __construct()
     {
         $this->rounds = new ArrayCollection();
@@ -81,6 +87,17 @@ class Game
         $this->user2 = $user2;
 
         return $this;
+    }
+
+
+    public function getUser1Id(){
+
+        return $this->getUser1()->getId();
+    }
+
+    public function getUser2Id(){
+
+        return $this->getUser2()->getId();
     }
 
     public function getCreated(): ?\DateTimeInterface
@@ -155,6 +172,19 @@ class Game
 
         return $this;
     }
+
+    public function getQuiJoue(): ?int
+    {
+        return $this->quiJoue;
+    }
+
+    public function setQuiJoue(int $quiJoue): self
+    {
+        $this->quiJoue = $quiJoue;
+
+        return $this;
+    }
+
 
 
 }

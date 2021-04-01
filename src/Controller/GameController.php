@@ -24,7 +24,8 @@ class GameController extends AbstractController
      */
     public function newGame(
         UserRepository $userRepository
-    ): Response {
+    ): Response
+    {
         $users = $userRepository->findAll();
 
         return $this->render('game/index.html.twig', [
@@ -40,7 +41,8 @@ class GameController extends AbstractController
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
         CardRepository $cardRepository
-    ): Response {
+    ): Response
+    {
         $user1 = $this->getUser();
         $user2 = $userRepository->find($request->request->get('user2'));
 
@@ -68,6 +70,8 @@ class GameController extends AbstractController
 
             $tMainJ1 = [];
             $tMainJ2 = [];
+
+
             for ($i = 0; $i < 6; $i++) {
                 //on distribue 6 cartes aux deux joueurs
                 $carte = array_pop($tCards);
@@ -78,7 +82,10 @@ class GameController extends AbstractController
             $set->setUser1HandCards($tMainJ1);
             $set->setUser2HandCards($tMainJ2);
 
+
+
             $tPioche = [];
+
 
             foreach ($tCards as $card) {
                 $carte = array_pop($tCards);
@@ -126,7 +133,8 @@ class GameController extends AbstractController
         CardRepository $cardRepository,
         Game $game
     ):
-    Response {
+    Response
+    {
         $cards = $cardRepository->findAll();
         $tCards = [];
         foreach ($cards as $card) {
@@ -141,6 +149,89 @@ class GameController extends AbstractController
 
     }
 
+
+    /**
+     * @Route("/get-tout-game/{game}", name="get_tour")
+     */
+    public function getTour(
+        Game $game
+    ): Response
+    {
+        if ($this->getUser()->getId() === $game->getUser1()->getId() && $game->getQuiJoue() === 1) {
+            return $this->json(true);
+        }
+
+        if ($this->getUser()->getId() === $game->getUser2()->getId() && $game->getQuiJoue() === 2) {
+            return $this->json(true);
+        }
+
+        return $this->json(false);
+    }
+
+
+
+    /**
+     * @Route("/change-player/{game}", name="change_player")
+     */
+    public function ChangePlayer(
+        Game $game,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+        if ($game->getQuiJoue() == 1) {
+            $game->setQuiJoue(2);
+        } else {
+            $game->setQuiJoue(1);
+        }
+
+        $entityManager->persist($game);
+        $entityManager->flush();
+
+        return $this->json(true);
+    }
+
+    /**
+     * @Route("/pioche/{game}", name="pioche")
+     */
+    public function Pioche(
+        Game $game,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+        if ($this->getUser()->getId() === $game->getUser1()->getId()) {
+            if ($game->getRounds()[0]->getUser1Pioche() == 0) {
+                $game->getRounds()[0]->setUser1Pioche(1);
+                $hands = $game->getRounds()[0]->getUser1HandCards();
+                array_push($hands, $game->getRounds()[0]->getPioche()[(sizeof($game->getRounds()[0]->getPioche()))-1]);
+                $game->getRounds()[0]->setUser1HandCards($hands);
+                $pioche = $game->getRounds()[0]->getPioche();
+                unset($pioche[(sizeof($game->getRounds()[0]->getPioche()))-1]);
+                $game->getRounds()[0]->setPioche($pioche);
+                $entityManager->persist($game->getRounds()[0]);
+                $entityManager->flush();
+                return $this->json(sizeof($game->getROunds()[0]->getUser1HandCards()));
+            }
+        } elseif ($this->getUser()->getId() === $game->getUser2()->getId()) {
+            if ($game->getRounds()[0]->getUser2Pioche() == 0) {
+                $game->getRounds()[0]->setUser2Pioche(1);
+                $hands = $game->getRounds()[0]->getUser2HandCards();
+                array_push($hands, $game->getRounds()[0]->getPioche()[(sizeof($game->getRounds()[0]->getPioche()))-1]);
+                $game->getRounds()[0]->setUser2HandCards($hands);
+                $pioche = $game->getRounds()[0]->getPioche();
+                unset($pioche[(sizeof($game->getROunds()[0]->getPioche()))-1]);
+                $game->getRounds()[0]->setPioche($pioche);
+                $entityManager->persist($game->getRounds()[0]);
+                $entityManager->flush();
+                return $this->json(sizeof($game->getRounds()[0]->getUser2HandCards()));
+            }
+        }
+        return $this->json(true);
+    }
+
+
+
+
+
     /**
      * @param Game $game
      * @route("/refresh/{game}", name="refresh_plateau_game")
@@ -152,10 +243,31 @@ class GameController extends AbstractController
         foreach ($cards as $card) {
             $tCards[$card->getId()] = $card;
         }
+
+        if ($this->getUser()->getId() === $game->getUser1()->getId()) {
+            $moi['handCards'] = $game->getRounds()[0]->getUser1HandCards();
+            $moi['actions'] = $game->getRounds()[0]->getUser1Action();
+            $moi['board'] = $game->getRounds()[0]->getUser1BoardCards();
+            $adversaire['handCards'] = $game->getRounds()[0]->getUser2HandCards();
+            $adversaire['actions'] = $game->getRounds()[0]->getUser2Action();
+            $adversaire['board'] = $game->getRounds()[0]->getUser2BoardCards();
+        } elseif ($this->getUser()->getId() === $game->getUser2()->getId()) {
+            $moi['handCards'] = $game->getRounds()[0]->getUser2HandCards();
+            $moi['actions'] = $game->getRounds()[0]->getUser2Action();
+            $moi['board'] = $game->getRounds()[0]->getUser2BoardCards();
+            $adversaire['handCards'] = $game->getRounds()[0]->getUser1HandCards();
+            $adversaire['actions'] = $game->getRounds()[0]->getUser1Action();
+            $adversaire['board'] = $game->getRounds()[0]->getUser1BoardCards();
+        } else {
+            //redirection... je ne suis pas l'un des deux joueurs
+        }
+
         return $this->render('game/plateau_game.html.twig', [
             'game' => $game,
             'set' => $game->getRounds()[0],
-            'cards' => $tCards
+            'cards' => $tCards,
+            'moi' => $moi,
+            'adversaire' => $adversaire
         ]);
     }
 
@@ -164,15 +276,15 @@ class GameController extends AbstractController
      */
     public function actionGame(
         EntityManagerInterface $entityManager,
-        Request $request, Game $game){
+        Request $request, Game $game)
+    {
 
 
         $action = $request->request->get('action');
         $user = $this->getUser();
         $round = $game->getRounds()[0]; //a gérer selon le round en cours
 
-        if ($game->getUser1()->getId() === $user->getId())
-        {
+        if ($game->getUser1()->getId() === $user->getId()) {
             $joueur = 1;
         } elseif ($game->getUser2()->getId() === $user->getId()) {
             $joueur = 2;
@@ -194,8 +306,63 @@ class GameController extends AbstractController
                 }
                 break;
         }
+        switch ($action) {
+            case 'secret':
+                $carte = $request->request->get('carte');
+                if ($joueur === 2) {
+                    $actions = $round->getUser2Action(); //un tableau...
+                    $actions['SECRET'] = [$carte]; //je sauvegarde la carte cachée dans mes actions
+                    $round->setUser2Action($actions); //je mets à jour le tableau
+                    $main = $round->getUser2HandCards();
+                    $indexCarte = array_search($carte, $main); //je récupère l'index de la carte a supprimer dans ma main
+                    unset($main[$indexCarte]); //je supprime la carte de ma main
+                    $round->setUser2HandCards($main);
+                }
+                break;
+        }
 
         $entityManager->flush();
+
+        return $this->json(true);
+
+
+    }
+
+    /**
+     * @Route("/delete-game/{game}", name="delete_game")
+     */
+    public function deleteGame(
+        EntityManagerInterface $entityManager,
+        Game $game
+    ): Response {
+        $entityManager->remove($game);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('new_game');
+    }
+
+    /**
+     * @Route("/reset-pioche/{game}", name="reset_pioche")
+     */
+    public function resetPioche(
+        Game $game,
+        EntityManagerInterface $entityManager
+    ): Response {
+        if ($this->getUser()->getId() === $game->getUser1()->getId() && $game->getQuiJoue() == 1) {
+            if ($game->getRounds()[0]->getUser1Pioche() == 1) {
+                $game->getRounds()[0]->setUser1Pioche(0);
+                $entityManager->persist($game->getRounds()[0]);
+                $entityManager->flush();
+            }
+        }
+
+        elseif ($this->getUser()->getId() === $game->getUser2()->getId() && $game->getQuiJoue() == 2) {
+            if ($game->getRounds()[0]->getUser2Pioche() == 1) {
+                $game->getRounds()[0]->setUser2Pioche(0);
+                $entityManager->persist($game->getRounds()[0]);
+                $entityManager->flush();
+            }
+        }
 
         return $this->json(true);
     }

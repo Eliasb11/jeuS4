@@ -38,7 +38,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-list', User::class);
         yield MenuItem::linkToCrud('Statistiques', 'fas fa-clipboard-list', Stats::class);
         yield MenuItem::linkToCrud('Parties', 'fas fa-gamepad', Game::class);
-        yield MenuItem::linkToCrud('Cartes', 'fas fa-gamepad', Card::class);
+        yield MenuItem::linkToCrud('Cartes', 'fas fa-puzzle-piece', Card::class);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Stats;
 use App\Entity\User;
+use App\Form\ModificationType;
 use App\Form\RegistrationType;
 
 
@@ -86,4 +87,30 @@ class SecurityController extends AbstractController
 
         return $this->render('security/registration.html.twig', ['form' => $form->createView()]);
     }
+
+    /**
+     * @Route ("/modifier", name="app_modifier")
+     */
+
+    public function modification(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder){
+        $user =$this->getUser();
+
+        $form = $this->createForm(ModificationType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()&& $form->isValid()){
+            $hash = $encoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($hash);
+            $manager->persist($user);
+            $manager->flush();
+
+            $this->addFlash('message', 'Profil mis à jour');
+
+            return $this->redirectToRoute('user_profil');
+        }
+
+
+        return $this->render('security/modification.html.twig', ['form' => $form->createView()]);
+    }
+
+
 }

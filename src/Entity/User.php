@@ -75,10 +75,6 @@ class User implements UserInterface
      */
     private $winners;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isVerified = false;
 
     /**
      * @ORM\OneToOne(targetEntity=Stats::class,  cascade={"persist", "remove"})
@@ -110,6 +106,8 @@ class User implements UserInterface
 
         return $this;
     }
+
+
 
     /**
      * A visual identifier that represents this user.
@@ -224,6 +222,19 @@ class User implements UserInterface
         return $this;
     }
 
+
+
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function getStatsId(){
+
+        return $this->getStats()->getId();
+    }
+
     /**
      * @return Collection|Game[]
      */
@@ -319,17 +330,6 @@ class User implements UserInterface
         return $this->firstname.' '.$this->lastname;
     }
 
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setIsVerified(bool $isVerified): self
-    {
-        $this->isVerified = $isVerified;
-
-        return $this;
-    }
 
     public function getStats(): ?Stats
     {

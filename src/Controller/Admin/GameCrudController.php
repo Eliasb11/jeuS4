@@ -20,8 +20,8 @@ class GameCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id'),
-            IdField::new('user1_id'),
-            IdField::new('user2_id'),
+            IdField::new('User1Id'),
+            IdField::new('User2Id'),
             IdField::new('winner_id'),
             DateTimeField::new('created'),
             DateTimeField::new('ended'),

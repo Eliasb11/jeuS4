@@ -11,7 +11,7 @@ class CardCrudController extends AbstractCrudController
     {
         return Card::class;
     }
-    
+
     /*
     public function configureFields(string $pageName): iterable
     {

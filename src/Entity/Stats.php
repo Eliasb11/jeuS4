@@ -49,6 +49,7 @@ class Stats
     }
 
 
+
     public function getVictoire(): ?int
     {
         return $this->victoire;
